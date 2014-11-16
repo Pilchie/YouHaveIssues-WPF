@@ -9,12 +9,6 @@
     <Import_RootNamespace>YouHaveIssues.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)MyClass.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)config.default.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)config.json" />
   </ItemGroup>
 </Project>

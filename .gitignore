@@ -5,3 +5,5 @@ bin/
 *.suo
 *.*proj.user
 *.userprefs
+
+packages
