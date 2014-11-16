@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using Octokit;
 
 namespace YouHaveIssues
 {
@@ -35,10 +36,6 @@ namespace YouHaveIssues
         {
             PerformSegue("showGitHubLogin", this);
 
-            dataSource.Objects.Insert(0, DateTime.Now);
-
-            using (var indexPath = NSIndexPath.FromRowSection(0, 0))
-                TableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Automatic);
         }
 
         public override void DidReceiveMemoryWarning()
@@ -65,7 +62,7 @@ namespace YouHaveIssues
         class DataSource : UITableViewSource
         {
             static readonly NSString CellIdentifier = new NSString("Cell");
-            readonly List<object> objects = new List<object>();
+            readonly List<GitHubClient> clients = new List<GitHubClient>();
             readonly MasterViewController controller;
 
             public DataSource(MasterViewController controller)
@@ -73,9 +70,9 @@ namespace YouHaveIssues
                 this.controller = controller;
             }
 
-            public IList<object> Objects
+            public IList<GitHubClient> Clients
             {
-                get { return objects; }
+                get { return clients; }
             }
 
             // Customize the number of sections in the table view.
@@ -86,7 +83,7 @@ namespace YouHaveIssues
 
             public override int RowsInSection(UITableView tableview, int section)
             {
-                return objects.Count;
+                return clients.Count;
             }
 
             // Customize the appearance of table view cells.
@@ -94,7 +91,10 @@ namespace YouHaveIssues
             {
                 var cell = (UITableViewCell)tableView.DequeueReusableCell(CellIdentifier, indexPath);
 
-                cell.TextLabel.Text = objects[indexPath.Row].ToString();
+                clients[indexPath.Row].User.Current().ContinueWith(prev =>
+                    {
+                        cell.TextLabel.Text = prev.Result.Login + " (" + prev.Result.Name + ")";
+                    }, System.Threading.Tasks.TaskContinuationOptions.AttachedToParent);
 
                 return cell;
             }
@@ -110,7 +110,7 @@ namespace YouHaveIssues
                 if (editingStyle == UITableViewCellEditingStyle.Delete)
                 {
                     // Delete the row from the data source.
-                    objects.RemoveAt(indexPath.Row);
+                    clients.RemoveAt(indexPath.Row);
                     controller.TableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
                 }
                 else if (editingStyle == UITableViewCellEditingStyle.Insert)
@@ -138,7 +138,7 @@ namespace YouHaveIssues
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
                 if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
-                    controller.DetailViewController.SetDetailItem(objects[indexPath.Row]);
+                    controller.DetailViewController.SetDetailItem(clients[indexPath.Row]);
             }
         }
 
@@ -147,9 +147,20 @@ namespace YouHaveIssues
             if (segue.Identifier == "showDetail")
             {
                 var indexPath = TableView.IndexPathForSelectedRow;
-                var item = dataSource.Objects[indexPath.Row];
+                var item = dataSource.Clients[indexPath.Row];
 
                 ((DetailViewController)segue.DestinationViewController).SetDetailItem(item);
+            }
+            else if (segue.Identifier == "showGitHubLogin")
+            {
+                ((GitHubLoginViewController)segue.DestinationViewController).AccountAuthenticated += (o, e) =>
+                {
+                    dataSource.Clients.Insert(0, e.Client);
+                    using (var indexPath = NSIndexPath.FromRowSection(0, 0))
+                    {
+                        TableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Automatic);
+                    }
+                };
             }
         }
     }
