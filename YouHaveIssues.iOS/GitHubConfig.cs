@@ -4,9 +4,9 @@ using System.IO;
 
 namespace YouHaveIssues
 {
-	[JsonObject]
-	public class GitHubConfig
-	{
+    [JsonObject]
+    public class GitHubConfig
+    {
         public static GitHubConfig Load()
         {
             using (var reader = new JsonTextReader(new StreamReader("config.json")))
@@ -16,15 +16,15 @@ namespace YouHaveIssues
         }
 
         [JsonProperty]
-		public string ClientID { get; private set; }
+        public string ClientID { get; private set; }
 
-		[JsonProperty]
-		public string ClientSecret { get; private set; }
+        [JsonProperty]
+        public string ClientSecret { get; private set; }
 
-		public GitHubConfig (string clientId, string clientSecret)
-		{
-			this.ClientID = clientId;
-			this.ClientSecret = clientSecret;
-		}
-	}
+        public GitHubConfig(string clientId, string clientSecret)
+        {
+            this.ClientID = clientId;
+            this.ClientSecret = clientSecret;
+        }
+    }
 }
