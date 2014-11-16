@@ -93,8 +93,8 @@ namespace YouHaveIssues
 
                 clients[indexPath.Row].User.Current().ContinueWith(prev =>
                     {
-                        cell.TextLabel.Text = prev.Result.Login + " (" + prev.Result.Name + ")";
-                    }, System.Threading.Tasks.TaskContinuationOptions.AttachedToParent);
+                        InvokeOnMainThread(() => cell.TextLabel.Text = prev.Result.Login + " (" + prev.Result.Name + ")");
+                    });
 
                 return cell;
             }
