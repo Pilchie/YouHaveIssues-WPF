@@ -33,6 +33,8 @@ namespace YouHaveIssues
 
         void AddNewItem(object sender, EventArgs args)
         {
+            PerformSegue("showGitHubLogin", this);
+
             dataSource.Objects.Insert(0, DateTime.Now);
 
             using (var indexPath = NSIndexPath.FromRowSection(0, 0))

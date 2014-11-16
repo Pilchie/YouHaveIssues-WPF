@@ -124,6 +124,10 @@
       <DependentUpon>DetailViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="GitHubConfig.cs" />
+    <Compile Include="GitHubLoginViewController.cs" />
+    <Compile Include="GitHubLoginViewController.designer.cs">
+      <DependentUpon>GitHubLoginViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainStoryboard_iPhone.storyboard" />
