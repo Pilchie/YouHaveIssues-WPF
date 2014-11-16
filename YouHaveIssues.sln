@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouHaveIssues.iOS", "YouHaveIssues.iOS\YouHaveIssues.iOS.csproj", "{6874DBF7-F037-4C17-8D00-C06169D1D0E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouHaveIssues", "YouHaveIssues.iOS\YouHaveIssues.csproj", "{6874DBF7-F037-4C17-8D00-C06169D1D0E3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouHaveIssues.Android", "YouHaveIssues.Android\YouHaveIssues.Android.csproj", "{E926A0BE-4EAF-4A07-984F-B817C9100759}"
 EndProject
@@ -43,6 +43,6 @@ Global
 		{E926A0BE-4EAF-4A07-984F-B817C9100759}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = YouHaveIssues.iOS\YouHaveIssues.iOS.csproj
+		StartupItem = YouHaveIssues.iOS\YouHaveIssues.csproj
 	EndGlobalSection
 EndGlobal

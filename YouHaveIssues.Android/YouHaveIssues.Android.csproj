@@ -59,4 +59,11 @@
     <AndroidResource Include="Resources\drawable\Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <PropertyGroup>
+    <BuildDependsOn>CopyConfig;$(BuildDependsOn)</BuildDependsOn>
+  </PropertyGroup>
+  <Target Name="CopyConfig">
+    <Copy Condition="Exists('..\YouHaveIssues.Shared\config.secret.json')" SourceFiles="..\YouHaveIssues.Shared\config.secret.json" DestinationFiles="..\YouHaveIssues.Shared\config.json" />
+    <Copy Condition="!Exists('..\YouHaveIssues.Shared\config.secret.json')" SourceFiles="..\YouHaveIssues.Shared\config.default.json" DestinationFiles="..\YouHaveIssues.Shared\config.json" />
+  </Target>
 </Project>
