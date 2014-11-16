@@ -14,11 +14,11 @@ namespace YouHaveIssues
         public MasterViewController(IntPtr handle)
             : base(handle)
         {
-            Title = NSBundle.MainBundle.LocalizedString("Master", "Master");
+            Title = NSBundle.MainBundle.LocalizedString("Accounts", "Accounts");
 			
             if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
             {
-                ContentSizeForViewInPopover = new SizeF(320f, 600f);
+                PreferredContentSize = new SizeF(320f, 600f);
                 ClearsSelectionOnViewWillAppear = false;
             }
 			
