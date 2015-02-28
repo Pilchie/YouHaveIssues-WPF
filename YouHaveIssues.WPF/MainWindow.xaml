@@ -42,7 +42,7 @@
             Click="OnAuthenticateClicked"
             Grid.Row="1" />
         <ComboBox
-            x:Name="repositoriesCombo"
+            ItemsSource="{Binding Repositories}"
             SelectedItem="{Binding SelectedRepository}"
             Grid.Row="2">
             <ComboBox.ItemTemplate>
@@ -52,7 +52,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <DataGrid
-            x:Name="dataGrid"
+            ItemsSource="{Binding Issues}"
             Grid.Row="3"/>
     </Grid>
 </Window>

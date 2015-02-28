@@ -1,18 +1,7 @@
 ﻿using Octokit;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using YouHaveIssues.WPF.Properties;
 
 namespace YouHaveIssues.WPF
@@ -24,8 +13,16 @@ namespace YouHaveIssues.WPF
     {
         private readonly GitHubConfig config = GitHubConfig.Load();
         private readonly GitHubClient githubClient = new GitHubClient(new ProductHeaderValue("YouHaveIssues"));
-        private IReadOnlyList<Repository> repositories;
-        
+
+        #region DPs
+        public IReadOnlyList<Repository> Repositories
+        {
+            get { return (IReadOnlyList<Repository>)GetValue(RepositoriesProperty); }
+            set { SetValue(RepositoriesProperty, value); }
+        }
+        public static readonly DependencyProperty RepositoriesProperty =
+            DependencyProperty.Register("Repositories", typeof(IReadOnlyList<Repository>), typeof(MainWindow));
+
         public Repository SelectedRepository
         {
             get { return (Repository)GetValue(SelectedRepositoryProperty); }
@@ -41,12 +38,19 @@ namespace YouHaveIssues.WPF
                     mw.SelectedRepositoryChanged();
                 }));
 
-        public async  void SelectedRepositoryChanged()
+        public async void SelectedRepositoryChanged()
         {
-            var issues = await githubClient.Issue.GetForRepository(SelectedRepository.Owner.Login, SelectedRepository.Name);
-            dataGrid.ItemsSource = issues;
+            Issues = await githubClient.Issue.GetForRepository(SelectedRepository.Owner.Login, SelectedRepository.Name);
         }
 
+        public IReadOnlyList<Issue> Issues
+        {
+            get { return (IReadOnlyList<Issue>)GetValue(IssuesProperty); }
+            set { SetValue(IssuesProperty, value); }
+        }
+        public static readonly DependencyProperty IssuesProperty =
+            DependencyProperty.Register("Issues", typeof(IReadOnlyList<Issue>), typeof(MainWindow));
+        #endregion
 
         public MainWindow()
         {
@@ -65,15 +69,8 @@ namespace YouHaveIssues.WPF
         private async void OnAuthenticateClicked(object sender, RoutedEventArgs e)
         {
             githubClient.Credentials = new Credentials(token.Text);
-            repositories = await githubClient.Repository.GetAllForCurrent();
-            foreach (var repo in repositories.OrderBy(r => r.FullName))
-            {
-                repositoriesCombo.Items.Add(repo);
-                if (Settings.Default.SelectedRepository.Length > 0 && (repo.FullName == Settings.Default.SelectedRepository))
-                {
-                    SelectedRepository = repo;
-                }
-            }
+            Repositories = await githubClient.Repository.GetAllForCurrent();
+            SelectedRepository = Repositories.FirstOrDefault(r => r.FullName == Settings.Default.SelectedRepository);
         }
     }
 }
