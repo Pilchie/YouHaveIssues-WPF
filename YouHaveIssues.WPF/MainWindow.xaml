@@ -51,7 +51,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Issues}" Grid.Row="3">
+        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Issues}" IsReadOnly="True" Grid.Row="3">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="#">
                     <DataGridTemplateColumn.CellTemplate>
