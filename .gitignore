@@ -1,9 +1,9 @@
 obj/
 bin/
-*.sln.ide/
+.vs/
+packages/
 
 *.suo
 *.*proj.user
 *.userprefs
 
-packages
