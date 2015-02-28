@@ -13,6 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouHaveIssues.WPF", "YouHav
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		YouHaveIssues.Shared\YouHaveIssues.Shared.projitems*{b2f519f4-58bc-4e34-8088-760ee7a10735}*SharedItemsImports = 4
 		YouHaveIssues.Shared\YouHaveIssues.Shared.projitems*{8578c5cc-b2cb-4fb6-8e2a-2256e2cebb10}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

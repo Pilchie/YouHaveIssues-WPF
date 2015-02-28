@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Octokit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,9 @@ namespace YouHaveIssues.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly GitHubConfig config = GitHubConfig.Load();
+        private readonly GitHubClient unauthenticatedClient = new GitHubClient(new ProductHeaderValue("YouHaveIssues"));
+
         public MainWindow()
         {
             InitializeComponent();
