@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:YouHaveIssues.WPF"
     mc:Ignorable="d"
     Title="You Have Issues"
     Height="350"
-    Width="525">
+    Width="525"
+    DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition
@@ -42,8 +43,14 @@
             Grid.Row="1" />
         <ComboBox
             x:Name="repositoriesCombo"
-            SelectionChanged="repositoriesCombo_SelectionChanged"
-            Grid.Row="2" />
+            SelectedItem="{Binding SelectedRepository}"
+            Grid.Row="2">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding FullName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
         <DataGrid
             x:Name="dataGrid"
             Grid.Row="3"/>

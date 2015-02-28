@@ -25,19 +25,40 @@ namespace YouHaveIssues.WPF
         private readonly GitHubConfig config = GitHubConfig.Load();
         private readonly GitHubClient githubClient = new GitHubClient(new ProductHeaderValue("YouHaveIssues"));
         private IReadOnlyList<Repository> repositories;
-        Repository selectedRepository;
+        
+        public Repository SelectedRepository
+        {
+            get { return (Repository)GetValue(SelectedRepositoryProperty); }
+            set { SetValue(SelectedRepositoryProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedRepositoryProperty =
+            DependencyProperty.Register("SelectedRepository", typeof(Repository), typeof(MainWindow), new PropertyMetadata(
+                (d, e) =>
+                {
+                    var mw = d as MainWindow;
+                    if (mw == null) return;
+                    mw.SelectedRepositoryChanged();
+                }));
+
+        public async  void SelectedRepositoryChanged()
+        {
+            var issues = await githubClient.Issue.GetForRepository(SelectedRepository.Owner.Login, SelectedRepository.Name);
+            dataGrid.ItemsSource = issues;
+        }
+
 
         public MainWindow()
         {
             InitializeComponent();
-            this.Closing += MainWindow_Closing;
+            Closing += MainWindow_Closing;
             token.Text = Settings.Default.AuthenticationToken;
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Settings.Default.AuthenticationToken = token.Text;
-            Settings.Default.SelectedRepository = (string)repositoriesCombo.SelectedItem;
+            Settings.Default.SelectedRepository = SelectedRepository.FullName;
             Settings.Default.Save();
         }
 
@@ -47,20 +68,12 @@ namespace YouHaveIssues.WPF
             repositories = await githubClient.Repository.GetAllForCurrent();
             foreach (var repo in repositories.OrderBy(r => r.FullName))
             {
-                repositoriesCombo.Items.Add(repo.FullName);
-                if (repo.FullName == Settings.Default.SelectedRepository)
+                repositoriesCombo.Items.Add(repo);
+                if (Settings.Default.SelectedRepository.Length > 0 && (repo.FullName == Settings.Default.SelectedRepository))
                 {
-                    selectedRepository = repo;
-                    repositoriesCombo.SelectedItem = repo.FullName;
+                    SelectedRepository = repo;
                 }
             }
-        }
-
-        private async void repositoriesCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var issues = await githubClient.Issue.GetForRepository(
-                selectedRepository.Owner.Login, selectedRepository.Name);
-            dataGrid.ItemsSource = issues;
         }
     }
 }
