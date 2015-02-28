@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:YouHaveIssues.WPF"
     mc:Ignorable="d"
     Title="You Have Issues"
     Height="350"
-    Width="525">
+    Width="525"
+    DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition
@@ -33,7 +34,7 @@
                 Grid.Column="0" />
 
             <TextBox
-                x:Name="token"
+                Text="{Binding Token}"
                 Grid.Column="1" />
         </Grid>
         <Button
@@ -41,11 +42,40 @@
             Click="OnAuthenticateClicked"
             Grid.Row="1" />
         <ComboBox
-            x:Name="repositoriesCombo"
-            SelectionChanged="repositoriesCombo_SelectionChanged"
-            Grid.Row="2" />
-        <DataGrid
-            x:Name="dataGrid"
-            Grid.Row="3"/>
+            ItemsSource="{Binding Repositories}"
+            SelectedItem="{Binding SelectedRepository}"
+            Grid.Row="2">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding FullName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Issues}" Grid.Row="3">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="#">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Center">
+                                <Hyperlink NavigateUri="{Binding HtmlUrl}"  RequestNavigate="Hyperlink_RequestNavigate">
+                                    <TextBlock Text="{Binding Number}"/>
+                                </Hyperlink>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Updated" Binding="{Binding UpdatedAt}" Width="150"/>
+                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                <DataGridTextColumn Header="User" Binding="{Binding User}"/>
+                <DataGridTextColumn Header="State" Binding="{Binding State}"/>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid Margin="5">
+                        <TextBlock Text="{Binding Body}"/>
+                    </Grid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+            </DataGrid>
     </Grid>
 </Window>
