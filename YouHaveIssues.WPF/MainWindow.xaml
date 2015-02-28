@@ -10,6 +10,42 @@
     Height="350"
     Width="525">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="auto" />
+            <RowDefinition
+                Height="auto" />
+            <RowDefinition
+                Height="auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+        <Grid
+            Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="auto" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Content="Auth token:"
+                Grid.Column="0" />
 
+            <TextBox
+                x:Name="token"
+                Grid.Column="1" />
+        </Grid>
+        <Button
+            Content="Authenticate"
+            Click="OnAuthenticateClicked"
+            Grid.Row="1" />
+        <ComboBox
+            x:Name="repositoriesCombo"
+            SelectionChanged="repositoriesCombo_SelectionChanged"
+            Grid.Row="2" />
+        <DataGrid
+            x:Name="dataGrid"
+            Grid.Row="3"/>
     </Grid>
 </Window>

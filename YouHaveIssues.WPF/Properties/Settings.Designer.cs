@@ -22,5 +22,29 @@ namespace YouHaveIssues.WPF.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AuthenticationToken {
+            get {
+                return ((string)(this["AuthenticationToken"]));
+            }
+            set {
+                this["AuthenticationToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SelectedRepository {
+            get {
+                return ((string)(this["SelectedRepository"]));
+            }
+            set {
+                this["SelectedRepository"] = value;
+            }
+        }
     }
 }
