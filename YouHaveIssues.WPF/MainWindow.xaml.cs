@@ -1,4 +1,5 @@
-﻿using Octokit;
+﻿using System.Diagnostics;
+using Octokit;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -15,6 +16,15 @@ namespace YouHaveIssues.WPF
         private readonly GitHubClient githubClient = new GitHubClient(new ProductHeaderValue("YouHaveIssues"));
 
         #region DPs
+
+        public string Token
+        {
+            get { return (string)GetValue(TokenProperty); }
+            set { SetValue(TokenProperty, value); }
+        }
+        public static readonly DependencyProperty TokenProperty =
+            DependencyProperty.Register("Token", typeof(string), typeof(MainWindow));
+
         public IReadOnlyList<Repository> Repositories
         {
             get { return (IReadOnlyList<Repository>)GetValue(RepositoriesProperty); }
@@ -56,21 +66,27 @@ namespace YouHaveIssues.WPF
         {
             InitializeComponent();
             Closing += MainWindow_Closing;
-            token.Text = Settings.Default.AuthenticationToken;
+            Token = Settings.Default.AuthenticationToken;
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Settings.Default.AuthenticationToken = token.Text;
-            Settings.Default.SelectedRepository = SelectedRepository.FullName;
+            if (Token != null) Settings.Default.AuthenticationToken = Token;
+            if (SelectedRepository != null) Settings.Default.SelectedRepository = SelectedRepository.FullName;
             Settings.Default.Save();
         }
 
         private async void OnAuthenticateClicked(object sender, RoutedEventArgs e)
         {
-            githubClient.Credentials = new Credentials(token.Text);
+            githubClient.Credentials = new Credentials(Token);
             Repositories = await githubClient.Repository.GetAllForCurrent();
             SelectedRepository = Repositories.FirstOrDefault(r => r.FullName == Settings.Default.SelectedRepository);
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

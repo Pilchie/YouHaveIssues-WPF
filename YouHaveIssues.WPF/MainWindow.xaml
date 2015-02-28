@@ -34,7 +34,7 @@
                 Grid.Column="0" />
 
             <TextBox
-                x:Name="token"
+                Text="{Binding Token}"
                 Grid.Column="1" />
         </Grid>
         <Button
@@ -51,8 +51,31 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <DataGrid
-            ItemsSource="{Binding Issues}"
-            Grid.Row="3"/>
+        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Issues}" Grid.Row="3">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="#">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Center">
+                                <Hyperlink NavigateUri="{Binding HtmlUrl}"  RequestNavigate="Hyperlink_RequestNavigate">
+                                    <TextBlock Text="{Binding Number}"/>
+                                </Hyperlink>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Updated" Binding="{Binding UpdatedAt}" Width="150"/>
+                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                <DataGridTextColumn Header="User" Binding="{Binding User}"/>
+                <DataGridTextColumn Header="State" Binding="{Binding State}"/>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid Margin="5">
+                        <TextBlock Text="{Binding Body}"/>
+                    </Grid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+            </DataGrid>
     </Grid>
 </Window>
