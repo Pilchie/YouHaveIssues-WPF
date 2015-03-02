@@ -50,7 +50,10 @@ namespace YouHaveIssues.WPF
 
         public async void SelectedRepositoryChanged()
         {
-            Issues = await githubClient.Issue.GetForRepository(SelectedRepository.Owner.Login, SelectedRepository.Name);
+            using (new WaitCursor(this))
+            {
+                Issues = await githubClient.Issue.GetForRepository(SelectedRepository.Owner.Login, SelectedRepository.Name);
+            }
         }
 
         public IReadOnlyList<Issue> Issues
@@ -78,8 +81,12 @@ namespace YouHaveIssues.WPF
 
         private async void OnAuthenticateClicked(object sender, RoutedEventArgs e)
         {
-            githubClient.Credentials = new Credentials(Token);
-            Repositories = await githubClient.Repository.GetAllForCurrent();
+            using (new WaitCursor(this))
+            {
+                githubClient.Credentials = new Credentials(Token);
+                Repositories = await githubClient.Repository.GetAllForCurrent();
+            }
+
             SelectedRepository = Repositories.FirstOrDefault(r => r.FullName == Settings.Default.SelectedRepository);
         }
 

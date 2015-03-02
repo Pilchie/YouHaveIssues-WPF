@@ -8,6 +8,7 @@
     Title="You Have Issues"
     Height="350"
     Width="525"
+    WindowState="Maximized"
     DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
 
     <Grid>
@@ -51,9 +52,11 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Issues}" IsReadOnly="True" Grid.Row="3">
+        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Issues}" IsReadOnly="True"
+                  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray"
+                  Grid.Row="3">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="#">
+                <DataGridTemplateColumn Header="#" CanUserSort="True" SortMemberPath="Number">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock HorizontalAlignment="Center">
@@ -66,7 +69,13 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Updated" Binding="{Binding UpdatedAt}" Width="150"/>
                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
-                <DataGridTextColumn Header="User" Binding="{Binding User}"/>
+                <DataGridTemplateColumn Header="User" CanUserSort="True" SortMemberPath="Assignee.Login">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Center" Text="{Binding Assignee.Login}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="State" Binding="{Binding State}"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
@@ -76,6 +85,6 @@
                     </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
-            </DataGrid>
+        </DataGrid>
     </Grid>
 </Window>
