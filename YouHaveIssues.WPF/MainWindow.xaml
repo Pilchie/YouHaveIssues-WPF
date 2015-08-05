@@ -20,6 +20,8 @@
             <RowDefinition
                 Height="auto" />
             <RowDefinition
+                Height="auto" />
+            <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
         <Grid
@@ -52,39 +54,55 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="auto" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Content="Milestones:"
+                Grid.Column="0" />
+            <ListBox ItemsSource="{Binding Milestones}"
+                     Grid.Column="1">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ToggleButton Content="{Binding Title, Mode=OneTime}"
+                                      IsChecked="{Binding IsIncluded, Mode=OneWayToSource}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Content="Refresh"
+                    Click="OnClickRefresh"
+                    Grid.Column="2" />
+        </Grid>
         <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Issues}" IsReadOnly="True"
                   HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray"
-                  Grid.Row="3">
+                  Grid.Row="4">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="#" CanUserSort="True" SortMemberPath="Number">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock HorizontalAlignment="Center">
-                                <Hyperlink NavigateUri="{Binding HtmlUrl}"  RequestNavigate="Hyperlink_RequestNavigate">
+                                <Hyperlink NavigateUri="{Binding HtmlUrl}" RequestNavigate="Hyperlink_RequestNavigate">
                                     <TextBlock Text="{Binding Number}"/>
                                 </Hyperlink>
                             </TextBlock>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Updated" Binding="{Binding UpdatedAt}" Width="150"/>
+                <DataGridTextColumn Header="Milestone" Binding="{Binding Milestone}" />
+                <DataGridTextColumn Header="User" Binding="{Binding AssigneeLogin}" />
                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
-                <DataGridTemplateColumn Header="User" CanUserSort="True" SortMemberPath="Assignee.Login">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock HorizontalAlignment="Center" Text="{Binding Assignee.Login}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="State" Binding="{Binding State}"/>
             </DataGrid.Columns>
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-                    <Grid Margin="5">
-                        <TextBlock Text="{Binding Body}"/>
-                    </Grid>
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
         </DataGrid>
     </Grid>
 </Window>
