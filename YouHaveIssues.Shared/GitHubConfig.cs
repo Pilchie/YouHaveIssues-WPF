@@ -16,10 +16,10 @@ namespace YouHaveIssues
         }
 
         [JsonProperty]
-        public string ClientID { get; private set; }
+        public string ClientID { get; }
 
         [JsonProperty]
-        public string ClientSecret { get; private set; }
+        public string ClientSecret { get; }
 
         public GitHubConfig(string clientId, string clientSecret)
         {
